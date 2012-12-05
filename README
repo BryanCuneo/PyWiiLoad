@@ -1,6 +1,7 @@
 PyWiiLoad is a rewrite of wiiload.py (http://pastebin.com/4nWAkBpw). The main
 improvement is automatic zip archiving of directories (Wiiload can't send dirs).
-It also provides smooth error handling. The code itself has been changed quite a
+It also provides smooth error handling and the option for a user to input their
+Wii's IP address if $WIILOAD isn't set. The code itself has been changed quite a
 bit, but that doesn't affect the user (or shouldn't anyway). For license
 information, please see the COPYING file.
 
@@ -10,6 +11,8 @@ Requirements:
 1) An Internet-connected  Wii with The Homebrew Channel installed
 2) A computer connected to the same network as the Wii
 3) The environment variable $WIILOAD set to "tcp:[your Wii's IP]"
+   # Not entirely necessary, you can set it within the program, but that only
+   # works for one run.
 
 If you're not sure what your Wii's IP address is, open up the HBC, hit the
 Home button on your Wii Remote and look in the upper left-hand corner of the

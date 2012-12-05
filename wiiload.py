@@ -44,8 +44,17 @@ def getIP():
     """
     ip = os.getenv("WIILOAD")
     if ip is None:
-        print("$WIILOAD not set.")
-        exit()
+        set_ip = "i"
+        while set_ip.lower() not in ["y", "yes", "n", "no"]:
+            set_ip = raw_input("$WIILOAD not set. Would you like to set it "
+                               "temporarily? [y/n]: ")
+        if set_ip.lower() in ["n", "no"]:
+            print("\nGoodbye.")
+            exit()
+        else:
+            ip = "tcp:" + raw_input("Please enter your Wii's IP address "
+                                    "(i.e. 192.168.1.106): ")
+            print("\n")
     try:
         assert ip.startswith("tcp:")
     except:

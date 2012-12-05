@@ -1,3 +1,11 @@
+PyWiiLoad is a rewrite of wiiload.py (http://pastebin.com/4nWAkBpw). The main
+improvement is automatic zip archiving of directories (WiiLoad can't send dirs).
+It also provides smooth error handling. The code itself has been changed quite a
+bit, but that doesn't affect the user (or shouldn't anyway). For license
+information, please see the COPYING file.
+
+General WiiLoad info: http://wiibrew.org/wiki/Wiiload
+
 Requirements:
 1) An Internet-connected  Wii with The Homebrew Channel installed
 2) A computer connected to the same network as the Wii
@@ -34,6 +42,3 @@ You can send a zip file like this:
 If you try to send a directory with wiiload.py you will be asked if you want to
 compress it to a zip archive and send it or exit the program.  If you want to
 zip the directory, answer "y" at the prompt.  Otherwise, just type "n."
-
-
-For more info on WiiLoad, visit http://wiibrew.org/wiki/Wiiload

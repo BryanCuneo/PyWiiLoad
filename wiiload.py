@@ -90,10 +90,9 @@ def getFile(path):
             assert file.endswith(".dol") or file.endswith(".elf") or \
                 file.endswith(".zip")
         except:
-            try:
-                print("File type is not supported.  Must be a .dol, .elf, or "
-                      ".zip.")
-                exit()
+            print("File type is not supported. Must be .dol, .elf, or "
+                  ".zip.")
+            exit()
 
     return file
 
@@ -142,22 +141,27 @@ def send(chunks, conn, args):
     conn.close()
 
 
-def zip(folder):
+def zip(path):
     """Create a .zip archive if the user wants to send a directory.
 
     """
-    folder = folder.rstrip("/")
+    split_path = os.path.split(path)
+    folder = split_path[1]
+    # Change the wd to the parent of the forder to be zipped.
+    os.chdir(split_path[0])
     print("Zipping " + folder + "...")
     zip_deflated = zipfile.ZIP_DEFLATED
     zf = zipfile.ZipFile(folder + ".zip", mode="w", compression=zip_deflated)
+    parent = os.path.split(folder)
     for dirpath, dirs, files in os.walk(folder):
         for f in dirs + files:
             zf.write(os.path.join(dirpath, f))
     zf.close()
-    file = folder + ".zip"
+    file = path.rstrip("/") + ".zip"
     print("Done.\n")
 
     return file
+
 
 
 def main():

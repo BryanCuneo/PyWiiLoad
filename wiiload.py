@@ -88,10 +88,11 @@ def getFile(path):
     else:
         file = path
         try:
-            assert file.endswith(".dol") or file.endswith(".elf") \
-            or file.endswith(".zip")
+            assert file.endswith(".dol") or file.endswith(".elf") or \
+                file.endswith(".zip")
         except:
-            print("Filetype not supported. Must be .dol, .elf, or .zip.")
+            print("File type is not supported.  Must be .dol, .elf, or "
+                  ".zip.")
             exit()
 
     return file

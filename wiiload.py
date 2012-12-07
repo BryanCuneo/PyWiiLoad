@@ -20,8 +20,7 @@ usage message if run with no arguments, a README file, automatic zipping
 of directories, and the option to enter the IP address if the $WIILOAD
 isn't set.  The code is now PEP8 compliant.  It has also been
 reformatted into functions.  I felt this was necessary with all the extra
-code that I added.  A port to python 3 can be found in the "Python3"
-branch.
+code that I added.
 
 Original wiiload.py (author unknown): http://pastebin.com/4nWAkBpw
 
@@ -38,6 +37,7 @@ import zlib
 # Required to send to the HBC
 WIILOAD_VERSION_MAJOR = 0
 WIILOAD_VERSION_MINOR = 5
+
 
 def getIP():
     """Obtain the Wii's IP address from the $WIILOAD environment variable.
@@ -64,6 +64,7 @@ def getIP():
 
     return ip
 
+
 def getFile(path):
     """Make sure it's possible to send the file/dir that the user provides.
 
@@ -87,7 +88,8 @@ def getFile(path):
     else:
         file = path
         try:
-            assert file.endswith(".dol") or file.endswith(".elf") or file.endswith(".zip")
+            assert file.endswith(".dol") or file.endswith(".elf") \
+            or file.endswith(".zip")
         except:
             print("Filetype not supported. Must be .dol, .elf, or .zip.")
             exit()

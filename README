@@ -3,7 +3,8 @@ improvement is automatic zip archiving of directories (Wiiload can't send dirs).
 It also provides smooth error handling and the option for a user to input their
 Wii's IP address if $WIILOAD isn't set. The code itself has been changed quite a
 bit, but that doesn't affect the user (or shouldn't anyway). For license
-information, please see the COPYING file.
+information, please see the COPYING file. A port to Python 3 is available in the
+"Python3" branch.
 
 General Wiiload info: http://wiibrew.org/wiki/Wiiload
 

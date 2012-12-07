@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 """PyWiiLoad Copyright (C) 2012 Bryan Cuneo
   This program is free software: you can redistribute it and/or modify
@@ -18,10 +18,10 @@ ________________________________________________________________________
 PyWiiLoad is a rewrite of wiiload.py.  I've added error handling, a
 usage message if run with no arguments, a README file, automatic zipping
 of directories, and the option to enter the IP address if the $WIILOAD
-isn't set. The code is now PEP8 compliant. It has also
-been reformatted into functions.  I felt this was necessary with all the
-code that I added.  I may port this to Python 3, as well (extremely
-minor changes have been made towards this).
+isn't set.  The code is now PEP8 compliant.  It has also been
+reformatted into functions.  I felt this was necessary with all the extra
+code that I added.  A port to python 3 can be found in the "Python3"
+branch.
 
 Original wiiload.py (author unknown): http://pastebin.com/4nWAkBpw
 
@@ -47,13 +47,13 @@ def getIP():
     if ip is None:
         set_ip = "i"
         while set_ip.lower() not in ["y", "yes", "n", "no"]:
-            set_ip = raw_input("$WIILOAD is not set. Would you like to set it "
+            set_ip = input("$WIILOAD is not set. Would you like to set it "
                                "temporarily? [y/n]: ")
         if set_ip.lower() in ["n", "no"]:
             print("\nGoodbye.")
             exit()
         else:
-            ip = "tcp:" + raw_input("Please enter your Wii's IP address "
+            ip = "tcp:" + input("Please enter your Wii's IP address "
                                     "(i.e. 192.168.1.106): ")
             print("\n")
     try:
@@ -77,7 +77,7 @@ def getFile(path):
               " and zip archives.")
         zip_or_not = "i"
         while zip_or_not.lower() not in ["y", "yes", "n", "no"]:
-            zip_or_not = raw_input("Would you like to zip this directory "
+            zip_or_not = input("Would you like to zip this directory "
                                    "and send it? [y/n]: ")
             if zip_or_not.lower() in ["n", "no"]:
                 print("\nGoodbye.")
@@ -87,13 +87,10 @@ def getFile(path):
     else:
         file = path
         try:
-            assert path.endswith(".dol")
+            assert file.endswith(".dol") or file.endswith(".elf") or file.endswith(".zip")
         except:
-            try:
-                assert path.endswith(".elf")
-            except:
-                print("Executable must be a .dol or .elf file.")
-                exit()
+            print("Filetype not supported. Must be .dol, .elf, or .zip.")
+            exit()
 
     return file
 
@@ -109,18 +106,18 @@ def connect(ip_string, wii_ip, args, c_data, file):
     except socket.error as e:
         print("Can't connect to the Wii:")
         print(e)
-        print("\nMake sure that your Wii is on, connected to the Internet, and"
-              " the\nHomebrew Channel is open.")
+        print("\nConfirm your IP address, make sure that your Wii is on, "
+              "connected to the Internet, and the\nHomebrew Channel is open.")
         exit()
     print("Connection successful.\n")
 
-    conn.send("HAXX")
+    conn.send(bytes("HAXX", "utf8"))
     conn.send(struct.pack("B", WIILOAD_VERSION_MAJOR))  # one byte, unsigned
     conn.send(struct.pack("B", WIILOAD_VERSION_MINOR))  # one byte, unsigned
     conn.send(struct.pack(">H", len(args)))  # bigendian, 2 bytes, unsigned
     conn.send(struct.pack(">L", len(c_data)))  # bigendian, 4 bytes, unsigned
     conn.send(struct.pack(">L", os.path.getsize(file)))  # bigendian, 4
-                                                             # unsigned
+                                                         # unsigned
 
     return conn
 
@@ -138,7 +135,7 @@ def send(chunks, conn, args):
         if num != len(chunks):
             sys.stdout.write(", ")
             sys.stdout.flush()
-    conn.send(args)
+    conn.send(bytes(args, "utf8"))
     conn.close()
 
 
@@ -164,8 +161,6 @@ def main():
     """The main function (duh).
 
     """
-
-
     # Check if the first argument is a valid file or directory.  If not,
     # print a usage message and exit.
     try:
@@ -191,7 +186,7 @@ of the GPLv3+.\n""")
     wii_ip = (ip_string[4:], 4299)
 
     # Compress the file and get it ready to send.
-    c_data = zlib.compress(open(file).read(), 6)
+    c_data = zlib.compress(open(file, "rb").read())
     chunk_size = 1024 * 128
     chunks = [c_data[i:i + chunk_size] for i in range(0, len(c_data),
                                                       chunk_size)]
@@ -203,7 +198,7 @@ of the GPLv3+.\n""")
     conn = connect(ip_string, wii_ip, args, c_data, file)
     send(chunks, conn, args)
 
-    # Print a parting message.
+    # Print a parting message.             mmmmmmm
     print("\nDone.\n\nThank you for using PyWiiLoad!")
 
 

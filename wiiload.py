@@ -18,10 +18,10 @@ ________________________________________________________________________
 PyWiiLoad is a rewrite of wiiload.py.  I've added error handling, a
 usage message if run with no arguments, a README file, automatic zipping
 of directories, and the option to enter the IP address if the $WIILOAD
-isn't set. The code is now PEP8 compliant. It has also
-been reformatted into functions.  I felt this was necessary with all the
-code that I added.  I may port this to Python 3, as well (extremely
-minor changes have been made towards this).
+isn't set.  The code is now PEP8 compliant.  It has also been
+reformatted into functions.  I felt this was necessary with all the
+extra code that I added.  A port to Python 3 can be found in the
+"Python3" branch.
 
 Original wiiload.py (author unknown): http://pastebin.com/4nWAkBpw
 
@@ -87,12 +87,12 @@ def getFile(path):
     else:
         file = path
         try:
-            assert path.endswith(".dol")
+            assert file.endswith(".dol") or file.endswith(".elf") or \
+                file.endswith(".zip")
         except:
             try:
-                assert path.endswith(".elf")
-            except:
-                print("Executable must be a .dol or .elf file.")
+                print("File type is not supported.  Must be a .dol, .elf, or "
+                      ".zip.")
                 exit()
 
     return file

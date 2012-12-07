@@ -16,8 +16,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ________________________________________________________________________
 
 PyWiiLoad is a rewrite of wiiload.py.  I've added error handling, a
-usage message if run with no arguments, a README file, and automatic
-zipping of directories.  The code is now PEP8 compliant. It has also
+usage message if run with no arguments, a README file, automatic zipping
+of directories, and the option to enter the IP address if the $WIILOAD
+isn't set. The code is now PEP8 compliant. It has also
 been reformatted into functions.  I felt this was necessary with all the
 code that I added.  I may port this to Python 3, as well (extremely
 minor changes have been made towards this).
@@ -46,7 +47,7 @@ def getIP():
     if ip is None:
         set_ip = "i"
         while set_ip.lower() not in ["y", "yes", "n", "no"]:
-            set_ip = raw_input("$WIILOAD not set. Would you like to set it "
+            set_ip = raw_input("$WIILOAD is not set. Would you like to set it "
                                "temporarily? [y/n]: ")
         if set_ip.lower() in ["n", "no"]:
             print("\nGoodbye.")
@@ -164,20 +165,24 @@ def main():
 
     """
 
-    print("""PyWiiLoad  Copyright (C) 2012 Bryan Cuneo
-This program comes with ABSOLUTELY NO WARRANTY.  This is free software,
-and you are welcome to use, modify, and redistribute it under the terms
-of the GPLv3+.\n""")
 
     # Check if the first argument is a valid file or directory.  If not,
     # print a usage message and exit.
-    if not sys.argv[1]:
+    try:
+        sys.argv[1]
+    except:
         print("""Usage:
 ./wiiload.py /path/to/boot.dol
 ./wiiload.py /path/to/boot.elf
 ./wiiload.py /path/to/appname.zip
 ./wiiload.py /path/to/appname/""")
         exit()
+
+    # Print a short copyright notice when the program is run.
+    print("""PyWiiLoad  Copyright (C) 2012 Bryan Cuneo
+This program comes with ABSOLUTELY NO WARRANTY.  This is free software,
+and you are welcome to use, modify, and redistribute it under the terms
+of the GPLv3+.\n""")
 
     # Get the Wii's IP address and the file to send.
     ip_string = getIP()

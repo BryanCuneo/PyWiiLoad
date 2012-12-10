@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 """PyWiiLoad Copyright (C) 2012 Bryan Cuneo
   This program is free software: you can redistribute it and/or modify
@@ -27,17 +27,19 @@ Original wiiload.py (author unknown): http://pastebin.com/4nWAkBpw
 """
 
 import os
+import platform
 import socket
 import struct
 import sys
 import zipfile
 import zlib
 
-
 # Required to send to the HBC
 WIILOAD_VERSION_MAJOR = 0
 WIILOAD_VERSION_MINOR = 5
 
+# Get the version of Python this program is running under.
+python_version = platform.python_version_tuple()
 
 def getIP():
     """Obtain the Wii's IP address from the $WIILOAD environment variable.
@@ -47,14 +49,23 @@ def getIP():
     if ip is None:
         set_ip = "i"
         while set_ip.lower() not in ["y", "yes", "n", "no"]:
-            set_ip = input("$WIILOAD is not set. Would you like to set it "
+
+            if python_version[0] == "3":
+                set_ip = input("$WIILOAD is not set. Would you like to set it "
                                "temporarily? [y/n]: ")
+            else:
+                set_ip = raw_input("WIILOAD is not set. Would you like to set "
+                                   "it temporarily+ [y/n]: ")
         if set_ip.lower() in ["n", "no"]:
             print("\nGoodbye.")
             exit()
         else:
-            ip = "tcp:" + input("Please enter your Wii's IP address "
+            if python_version[0] == "3":
+                ip = "tcp:" + input("Please enter your Wii's IP address "
                                     "(i.e. 192.168.1.106): ")
+            else:
+                ip = "tcp:" + raw_input("Please enter your Wii's IP address "
+                                        "(i.e. 192.168.1.106): ")
             print("\n")
     try:
         assert ip.startswith("tcp:")
@@ -78,8 +89,12 @@ def getFile(path):
               " and zip archives.")
         zip_or_not = "i"
         while zip_or_not.lower() not in ["y", "yes", "n", "no"]:
-            zip_or_not = input("Would you like to zip this directory "
-                                   "and send it? [y/n]: ")
+            if python_version[0] == "3":
+                zip_or_not = input("Would you like to zip this directory and "
+                                   "send it? [y/n]: ")
+            else:
+                zip_or_not = raw_input("Would you like to zip this directory "
+                                       "and send it? [y/n]: ")
             if zip_or_not.lower() in ["n", "no"]:
                 print("\nGoodbye.")
                 exit()
@@ -112,7 +127,10 @@ def connect(ip_string, wii_ip, args, c_data, file):
         exit()
     print("Connection successful.\n")
 
-    conn.send(bytes("HAXX", "utf8"))
+    if python_version[0] == "3":
+        conn.send(bytes("HAXX", "utf8"))
+    else:
+        conn.send("HAXX")
     conn.send(struct.pack("B", WIILOAD_VERSION_MAJOR))  # one byte, unsigned
     conn.send(struct.pack("B", WIILOAD_VERSION_MINOR))  # one byte, unsigned
     conn.send(struct.pack(">H", len(args)))  # bigendian, 2 bytes, unsigned
@@ -136,7 +154,10 @@ def send(chunks, conn, args):
         if num != len(chunks):
             sys.stdout.write(", ")
             sys.stdout.flush()
-    conn.send(bytes(args, "utf8"))
+    if python_version[0] == "3":
+        conn.send(bytes(args, "utf8"))
+    else:
+        conn.send(args)
     conn.close()
 
 
@@ -151,7 +172,6 @@ def zip(path):
     print("Zipping " + folder + "...")
     zip_deflated = zipfile.ZIP_DEFLATED
     zf = zipfile.ZipFile(folder + ".zip", mode="w", compression=zip_deflated)
-    parent = os.path.split(folder)
     for dirpath, dirs, files in os.walk(folder):
         for f in dirs + files:
             zf.write(os.path.join(dirpath, f))
@@ -191,7 +211,10 @@ of the GPLv3+.\n""")
     wii_ip = (ip_string[4:], 4299)
 
     # Compress the file and get it ready to send.
-    c_data = zlib.compress(open(file, "rb").read())
+    if python_version[0] == "3":
+        c_data = zlib.compress(open(file, "rb").read())
+    else:
+        c_data = zlib.compress(open(file).read())
     chunk_size = 1024 * 128
     chunks = [c_data[i:i + chunk_size] for i in range(0, len(c_data),
                                                       chunk_size)]

@@ -1,0 +1,6 @@
+1.1 (current release):
+Versions for Python 3 and 2 have been combined into one file.
+
+1.0:
+* The first release that I'm satisfied with. The Python 2 and 3 versions both
+  function correctly.

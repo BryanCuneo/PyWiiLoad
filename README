@@ -1,17 +1,9 @@
- ______________________________________________________________________________
-|                                                                              |
-| This is the Python 3 port of PyWiiLoad.  I have tested it with version       |
-| 3.2.3 I will run it on a few other versions when I get the chance. Note that |
-| this doesn't support Python 2.  I may eventually combine the two versions    |
-| with a few try statements.                                                   |
-|______________________________________________________________________________|
-
 PyWiiLoad is a rewrite of wiiload.py (http://pastebin.com/4nWAkBpw). The main
 improvement is automatic zip archiving of directories (Wiiload can't send dirs).
 It also provides smooth error handling and the option for a user to input their
 Wii's IP address if $WIILOAD isn't set. The code itself has been changed quite a
 bit, but that doesn't affect the user (or shouldn't anyway). For license
-information, please see the COPYING file.
+information, please see the COPYING file. It runs under both Python 3 and 2.
 
 General Wiiload info: http://wiibrew.org/wiki/Wiiload
 

@@ -106,6 +106,7 @@ def getFile(path):
         if ext[1] not in [".dol", ".elf", ".zip"]:
             print("File type is not supported.  Must be .dol, .elf, or "
                   ".zip.")
+                  ".zip.")
             exit()
 
     return file
@@ -172,6 +173,7 @@ def zip(path):
     print("Zipping " + folder + "...")
     zip_deflated = zipfile.ZIP_DEFLATED
     zf = zipfile.ZipFile(folder + ".zip", mode="w", compression=zip_deflated)
+    parent = os.path.split(folder)
     for dirpath, dirs, files in os.walk(folder):
         for f in dirs + files:
             zf.write(os.path.join(dirpath, f))
@@ -180,6 +182,7 @@ def zip(path):
     print("Done.\n")
 
     return file
+
 
 
 def main():

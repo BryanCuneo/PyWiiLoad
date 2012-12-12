@@ -15,14 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ________________________________________________________________________
 
-PyWiiLoad is a rewrite of wiiload.py.  I've added error handling, a
-usage message if run with no arguments, a README file, automatic zipping
-of directories, and the option to enter the IP address if the $WIILOAD
-isn't set.  The code is now PEP8 compliant.  It has also been
-reformatted into functions.  I felt this was necessary with all the extra
-code that I added.
+PyWiiLoad sends apps and executables to a modded Wii over TCP.  It has
+smooth error handling (unlike it's predecessor), automatic zipping of
+directories, the option to enter the IP address if the $WII isn't set,
+and it runs under both Python 2 and Python 3.
 
-Original wiiload.py (author unknown): http://pastebin.com/4nWAkBpw
+GitHub page: https://github.com/dniMretsaM/PyWiiLoad/
+Bug tracker: https://github.com/dniMretsaM/PyWiiLoad/issues
+WiiBrew wiki page: http://wiibrew.org/wiki/PyWiiLoad
+
+Originally based on wiiload.py (author unknown):
+http://pastebin.com/4nWAkBpw
 
 """
 
@@ -34,7 +37,7 @@ import sys
 import zipfile
 import zlib
 
-# Required to send to the HBC
+# Required to send to the HBC.
 WIILOAD_VERSION_MAJOR = 0
 WIILOAD_VERSION_MINOR = 5
 
@@ -47,17 +50,20 @@ def getIP():
     """
     ip = os.getenv("WII")
     if ip is None:
+        # This statement is for compatability with the legacy $WIILOAD
+        # variable.  It will be reboved in version 2.0
         ip = os.getenv("WIILOAD")
         if ip is None:
             set_ip = "i"
             while set_ip.lower() not in ["y", "yes", "n", "no"]:
-
+                # Use input or raw_input depending on the version Python that
+                # PyWiiLoad is running under.
                 if python_version[0] == "3":
                     set_ip = input("$WII is not set. Would you like to set it "
                                    "temporarily? [y/n]: ")
                 else:
-                    set_ip = raw_input("WIILOAD is not set. Would you like to set "
-                                       "it temporarily+ [y/n]: ")
+                    set_ip = raw_input("WIILOAD is not set. Would you like to "
+                                       "set it temporarily+ [y/n]: ")
                 if set_ip.lower() in ["n", "no"]:
                     print("\nGoodbye.")
                     exit()
@@ -147,6 +153,8 @@ def send(chunks, conn, args):
     num = 0
     for piece in chunks:
         conn.send(piece)
+        # The progress display isn't exactly pretty.  I might try to do an
+        # actual progress bar eventually.
         num += 1
         sys.stdout.write(str(num))
         if num != len(chunks):

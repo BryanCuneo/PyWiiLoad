@@ -16,10 +16,10 @@ Requirements:
 2) A computer connected to the same LAN as the Wii.  This has been tested on
    GNU/Linux only.  I have no idea if it will work on Windows or OS X.
 3) Python.  Tested on versions 2.7.3 and 3.2.3.
-4) The environment variable $WIILOAD set to "tcp:[your Wii's IP].  If you don't
-   know what you're Wii's IP address is, open up the HBC and click the HOME
-   button.  The IP will be in the upper left-hand corner.  Note that PyWiiLoad
-   will allow you to set the address temporarily if $WIILOAD isn ot set.
+4) The environment variable $WII set to "[your Wii's IP].  If you don't know
+   what you're Wii's IP address is, open up the HBC and click the HOME button.
+   The IP will be in the upper left-hand corner.  Note that PyWiiLoad will allow
+   you to set the address temporarily if $WII is not set.
 5) An executable to run (.dol/.elf) or and app to install (.zip/dir).
 
 If you're not sure what your Wii's IP address is, open up the HBC, hit the
@@ -44,7 +44,7 @@ syscheck/boot.dol
 syscheck/icon.png
 syscheck/meta.xml
 
-Since most programs come with a zipped apps folder, you'll have to unzip it and
+Since most programs come with a zipped apps/ folder, you'll have to unzip it and
 recompress it the right way before you can send it.  If you send an incorrectly
 formed .zip the HBC will give you the error "This is not a usable ZIP file."
 You can send a zip file like this:

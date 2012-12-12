@@ -1,4 +1,13 @@
-1.1 (current release):
+1.2 (Current Release):
+* Now uses the environment variable $WII="[Wii's IP]".  This allows you to use
+  the same variable for programs like FTP (ftpii) since there is no "tcp:"
+  before the IP.  (PyWiiLoad will continue to support $WIILOAD="tcp:[Wii's IP]"
+  until version 2.0.
+
+1.1.1:
+* Fixed the crash in 1.1
+
+1.1:
 * Versions for Python 3 and 2 have been combined into one file.
 
 1.0:

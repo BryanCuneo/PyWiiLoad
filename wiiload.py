@@ -45,33 +45,31 @@ def getIP():
     """Obtain the Wii's IP address from the $WIILOAD environment variable.
 
     """
-    ip = os.getenv("WIILOAD")
+    ip = os.getenv("WII")
     if ip is None:
-        set_ip = "i"
-        while set_ip.lower() not in ["y", "yes", "n", "no"]:
+        ip = os.getenv("WIILOAD")
+        if ip is None:
+            set_ip = "i"
+            while set_ip.lower() not in ["y", "yes", "n", "no"]:
 
-            if python_version[0] == "3":
-                set_ip = input("$WIILOAD is not set. Would you like to set it "
-                               "temporarily? [y/n]: ")
-            else:
-                set_ip = raw_input("WIILOAD is not set. Would you like to set "
-                                   "it temporarily+ [y/n]: ")
-        if set_ip.lower() in ["n", "no"]:
-            print("\nGoodbye.")
-            exit()
-        else:
-            if python_version[0] == "3":
-                ip = "tcp:" + input("Please enter your Wii's IP address "
-                                    "(i.e. 192.168.1.106): ")
-            else:
-                ip = "tcp:" + raw_input("Please enter your Wii's IP address "
-                                        "(i.e. 192.168.1.106): ")
-            print("\n")
-    try:
-        assert ip.startswith("tcp:")
-    except:
-        print("$WIILOAD doesn't start with 'tcp:'")
-        exit()
+                if python_version[0] == "3":
+                    set_ip = input("$WII is not set. Would you like to set it "
+                                   "temporarily? [y/n]: ")
+                else:
+                    set_ip = raw_input("WIILOAD is not set. Would you like to set "
+                                       "it temporarily+ [y/n]: ")
+                if set_ip.lower() in ["n", "no"]:
+                    print("\nGoodbye.")
+                    exit()
+                else:
+                    if python_version[0] == "3":
+                        ip = input("Please enter your Wii's IP address "
+                                            "(i.e. 192.168.1.123): ")
+                    else:
+                        ip =  + raw_input("Please enter your Wii's IP address "
+                                                "(i.e. 192.168.1.123): ")
+    else:
+        ip = "tcp:" + ip
 
     return ip
 
@@ -105,7 +103,6 @@ def getFile(path):
         ext = os.path.splitext(file)
         if ext[1] not in [".dol", ".elf", ".zip"]:
             print("File type is not supported.  Must be .dol, .elf, or "
-                  ".zip.")
                   ".zip.")
             exit()
 
